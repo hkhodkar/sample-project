@@ -1,0 +1,13 @@
+[
+  { "id": "1", "value": "HTML" },
+  { "id": "2", "value": "CSS" },
+  { "id": "3", "value": "SCSS" },
+  { "id": "4", "value": "Angular" },
+  { "id": "5", "value": "React" },
+  { "id": "6", "value": "Rxjs" },
+  { "id": "7", "value": "Ngrx" },
+  { "id": "8", "value": "Git" },
+  { "id": "9", "value": "Tailwind" },
+  { "id": "10", "value": "Angular-Material" },
+  { "id": "11", "value": "Docker" }
+]
