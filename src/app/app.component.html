@@ -1,6 +1,7 @@
 <app-header />
 <section class="container">
   <app-card>
-    <app-employee-form />
+    <app-employee-form [employeeId]="employeeId" />
+    <app-employee-table (editRow)="onEditRow($event)" />
   </app-card>
 </section>

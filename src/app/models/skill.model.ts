@@ -1,4 +1,5 @@
 export interface SkillModel {
   id: number,
-  value: string
+  value: string,
+  isSelected?: boolean
 }

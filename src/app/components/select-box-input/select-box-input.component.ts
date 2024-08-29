@@ -1,4 +1,4 @@
-import { Component, forwardRef, inject, Input } from '@angular/core';
+import { Component, forwardRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, ReactiveFormsModule, FormControl, ControlContainer, FormGroup, Validators } from '@angular/forms';
 import { DropDownDataModel } from '../../models/dropdown-data.model';
@@ -23,8 +23,7 @@ export class SelectBoxInputComponent implements ControlValueAccessor {
   @Input({ required: true }) options!: DropDownDataModel[] | null;
   @Input() placeholder = '';
   @Input({ required: true }) label!: string;
-
-  value: number | null = null;
+  @Input() value: number | null = null;
   isDisabled = false;
 
   onChange: (value: number | null) => void = () => { };

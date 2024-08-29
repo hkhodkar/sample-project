@@ -8,16 +8,17 @@
     [minLength]="3" [maxLength]="30" />
   <app-input [formControl]="getFormControl('lastName')" label="Last Name" type="text" [minLength]="3"
     [maxLength]="30" />
-  <app-select-box-input label="Department Name" [options]="(departments$! | async)" placeholder="Department Name"
-    [formControl]="getFormControl('departmentName')">
+  <app-select-box-input label="Department Name" [value]="departmentName" [options]="(departments$! | async)"
+    placeholder="Department Name" [formControl]="getFormControl('departmentName')">
   </app-select-box-input>
-  <app-select-box-input [formControl]="getFormControl('grade')" label="Grade" [options]="(grade$! | async)"
-    placeholder="Grade" [formControl]="getFormControl('grade')">
+  <app-select-box-input [formControl]="getFormControl('grade')" label="Grade" [value]="grade"
+    [options]="(grade$! | async)" placeholder="Grade" [formControl]="getFormControl('grade')">
   </app-select-box-input>
   <app-select-box-input [formControl]="getFormControl('reportingManger')" label="Reporting Manger"
-    [options]="(reportingManger$! | async)" placeholder="Grade" [formControl]="getFormControl('reportingManager')">
+    [options]="(reportingManger$! | async)" placeholder="reportingManger" [value]="reportingManager"
+    [formControl]="getFormControl('reportingManager')">
   </app-select-box-input>
-  <app-input [formControl]="getFormControl('BasicSalary')" label="Basic Salary" type="number" [min]="100"
+  <app-input [formControl]="getFormControl('basicSalary')" label="Basic Salary" type="number" [min]="100"
     [max]="5000" />
   <app-input [formControl]="getFormControl('houseRent')" label="House Rent" type="number" [min]="100" [max]="3000" />
   <app-input [formControl]="getFormControl('otherAllowance')" label="Other Allowance" type="number" [min]="100"
@@ -26,8 +27,9 @@
     [max]="12000" />
   <app-input [formControl]="getFormControl('TotalSalaryPA')" label="Total Salary/PA" type="number" [min]="12000"
     [max]="144000" />
-  <app-skills-dropdown [formControl]="getFormControl('selectedSkills')"></app-skills-dropdown>
+  <app-skills-dropdown [selectedSkills]="skillItems ?? []"
+    [formControl]="getFormControl('selectedSkills')"></app-skills-dropdown>
 
 
 </form>
-<button (click)="onSubmit()" type="submit">Submit</button>
+<button (click)="onSubmit()" type="submit">Save</button>

@@ -9,7 +9,7 @@ import { DropDownDataModel } from '../models/dropdown-data.model';
 export class DepartmentsService {
   httpService = inject(BaseHttpService);
   private dataUrl = 'mock/departments.json';
-  getSkills(): Observable<DropDownDataModel[]> {
+  getDepartments(): Observable<DropDownDataModel[]> {
     return this.httpService.get<DropDownDataModel[]>(this.dataUrl);
   }
 }

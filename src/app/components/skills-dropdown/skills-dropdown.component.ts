@@ -18,7 +18,16 @@ import { SkillsService } from '../../services/skills.service';
     }
   ]
 })
-export class SkillsDropdownComponent implements OnInit, ControlValueAccessor {
+export class SkillsDropdownComponent implements OnInit, OnChanges, ControlValueAccessor {
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.selectedSkills.length > 0) {
+      this.selectedSkills.map(item => {
+        this.toggleSelection(item)
+      })
+    }
+  }
+
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
@@ -36,12 +45,18 @@ export class SkillsDropdownComponent implements OnInit, ControlValueAccessor {
   items: SkillModel[] = [];
   filteredItems: SkillModel[] = [];
   searchControl = new FormControl('', Validators.required);
+  @Input() selectedSkills: SkillModel[] = [];
   selectedItems: SkillModel[] = [];
   dropdownOpen = false;
 
   ngOnInit() {
     this.skillsService.getSkills().subscribe({
-      next: (res) => this.items = this.filteredItems = res
+      next: (res) => this.items = this.filteredItems = res.map(item => {
+        return {
+          ...item,
+          isSelected: false
+        }
+      })
     })
     this.searchControl.valueChanges.subscribe(value => {
       if (!value) return;
@@ -57,11 +72,23 @@ export class SkillsDropdownComponent implements OnInit, ControlValueAccessor {
   }
 
   toggleSelection(selectedItem: SkillModel) {
-    const index = this.selectedItems.findIndex(item => item.id === selectedItem.id);
+    const index = this.selectedItems.findIndex(item => item.id == selectedItem.id);
     if (index > -1) {
       this.selectedItems.splice(index, 1);
+      this.filteredItems = this.filteredItems.map(item => {
+        if (item.id === selectedItem.id) {
+          item.isSelected = false
+        }
+        return item;
+      });
     } else {
       this.selectedItems.push(selectedItem);
+      this.filteredItems = this.filteredItems.map(item => {
+        if (item.id === selectedItem.id) {
+          item.isSelected = true
+        }
+        return item;
+      });
     }
     this.searchControl.setValue('', { emitEvent: false });
     this.filterItems('');
@@ -92,6 +119,10 @@ export class SkillsDropdownComponent implements OnInit, ControlValueAccessor {
 
   setDisabledState?(isDisabled: boolean): void { }
 
+  checkedItems(item: SkillModel) {
+    return this.selectedItems.includes(item)
+  }
+
   get hasError(): boolean {
     return this.searchControl ? this.selectedItems.length === 0 && (this.searchControl.dirty || this.searchControl.touched) : false;
   }
@@ -102,4 +133,14 @@ export class SkillsDropdownComponent implements OnInit, ControlValueAccessor {
     }
     return '';
   }
+
+  updateSelection(filteredItems: SkillModel[], selectedItems: SkillModel[]): SkillModel[] {
+    const selectedItemIds = new Set(selectedItems.map(item => item.id));
+
+    return filteredItems.map(item => ({
+      ...item,
+      isSelected: selectedItemIds.has(item.id),
+    }));
+  }
 }
+

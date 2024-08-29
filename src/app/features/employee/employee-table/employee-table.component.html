@@ -1,0 +1,33 @@
+<div class="table-container">
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th *ngFor="let column of columns">{{ column.key }}</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of paginatedData">
+        <td *ngFor="let column of columns">
+          <span>{{row[column.value]}}</span>
+        </td>
+        <td>
+          <button class="edit-button" (click)="onEdit(row.id)">Edit</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <button class="page-button" (click)="previousPage()" [disabled]="currentPage === 1">
+      Previous
+    </button>
+    <button *ngFor="let page of [].constructor(totalPages); let i = index" class="page-button"
+      [class.active]="currentPage === i + 1" (click)="changePage(i + 1)">
+      {{ i + 1 }}
+    </button>
+    <button class="page-button" (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
+</div>

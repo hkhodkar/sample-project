@@ -5,7 +5,7 @@
       placeholder="Select Skills..." class="search-box" (click)="toggleDropdown()" />
     <div class="dropdown-list" *ngIf="dropdownOpen">
       <label *ngFor="let item of filteredItems">
-        <input type="checkbox" [checked]="selectedItems.includes(item)" (change)="toggleSelection(item)" />
+        <input type="checkbox" [checked]="item.isSelected" (change)="toggleSelection(item)" />
         {{ item.value }}
       </label>
     </div>
