@@ -4,13 +4,14 @@
   --color-accent: #1FB2A5;
   --color-info: #3abff8;
   --color-error: #f87272;
-  --color-body: #918ca4;
+  --color-body: #ccc;
   --color-body-darker: #5c5577;
-  --color-border: #ccc;
+  --color-white: #fff
 }
 
 html {
   font-size: 62.5%;
+  background-color: var(--color-body);
 }
 
 img {
@@ -21,7 +22,6 @@ body {
   font-family: Inter, Arial, Helvetica, sans-serif;
   font-size: 2rem;
   line-height: 1.5;
-  color: var(--color-body);
 }
 
 h1,
