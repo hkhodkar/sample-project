@@ -1,5 +1,6 @@
 <div class="dropdown-container">
   <div class="dropdown">
+    <label>Skills:</label>
     <input [ngClass]="hasError ? 'error-border' : ''" type="text" [formControl]="searchControl"
       placeholder="Select Skills..." class="search-box" (click)="toggleDropdown()" />
     <div class="dropdown-list" *ngIf="dropdownOpen">
