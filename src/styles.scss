@@ -106,5 +106,10 @@ button {
   background-color: var(--color-primary);
   border-radius: 8px;
   color: var(--color-white);
-  margin: 1rem 0rem;
+  margin: 3rem 0rem;
+}
+
+.button-disabled {
+  background-color: #e3e3e3;
+  cursor: not-allowed;
 }

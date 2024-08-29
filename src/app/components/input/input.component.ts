@@ -1,11 +1,11 @@
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { Component, forwardRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule, NgIf, NgFor],
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
   providers: [
@@ -19,17 +19,21 @@ import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Reacti
 export class InputComponent implements ControlValueAccessor, OnChanges {
 
   @Input() pattern: string | null = null;
+  @Input() isRequired: boolean = true;
   @Input() minLength: number | null = null;
   @Input() maxLength: number | null = null;
   @Input() min: number | null = null;
   @Input() max: number | null = null;
   @Input({ required: true }) label: string = '';
   @Input({ required: true }) type: string | number = '';
-  employeeFirstName = new FormControl<string | null>('', Validators.required);
+  employeeFirstName = new FormControl<string | null>(null);
   value: string | number | null = null;
   isDisabled = false;
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
+    if (this.isRequired) {
+      this.employeeFirstName.addValidators(Validators.required)
+    }
     if (this.pattern && this.pattern?.length > 0) {
       this.employeeFirstName.addValidators(Validators.pattern(this.pattern))
     }
@@ -52,7 +56,6 @@ export class InputComponent implements ControlValueAccessor, OnChanges {
   onTouched: () => void = () => { };
 
   writeValue(value: number | string | null): void {
-    console.log('aaa')
     this.value = value;
   }
 
@@ -80,25 +83,33 @@ export class InputComponent implements ControlValueAccessor, OnChanges {
   }
 
   get errorMessage(): string {
-
     if (this.employeeFirstName?.errors?.['required']) {
       return 'This field is required';
     }
+
     if (this.employeeFirstName.errors?.['pattern']) {
-      return 'pattern'
+      return 'code is invalid the correct example: A123AB1 or #1234CD12';
     }
 
     if (this.type === "number" && this.employeeFirstName.errors?.['min'])
-      return `the value must be greater than ${this.min}`
+      return `the value must be greater than ${this.min}`;
 
     if (this.type === "number" && this.employeeFirstName.errors?.['max'])
-      return `the value must be less than ${this.max}`
+      return `the value must be less than ${this.max}`;
 
     if (this.type === "text" && this.employeeFirstName.errors?.['minlength'])
-      return `the value length must be greater than ${this.minLength}`
+      return `the value length must be greater than ${this.minLength}`;
 
     if (this.type === "text" && this.employeeFirstName.errors?.['maxlength'])
-      return `the value length must be less than ${this.maxLength}`
-    return '';
+      return `the value length must be less than ${this.maxLength}`;
+
+    return "";
+  }
+
+  get patternError(): string[] {
+    if (this.employeeFirstName.errors?.['pattern']) {
+      return ['First letter from left to right must be upper case alphabet from A to Z or “#” /br']
+    }
+    return [""]
   }
 }
