@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BaseHttpService } from '../core/base-http.service';
 import { Observable } from 'rxjs';
 import { SkillModel } from '../models/skill.model';
@@ -7,9 +7,10 @@ import { SkillModel } from '../models/skill.model';
   providedIn: 'root'
 })
 
-export class SkillsService extends BaseHttpService {
+export class SkillsService {
+  httpService = inject(BaseHttpService);
   private dataUrl = 'mock/skills.json';
   getSkills(): Observable<SkillModel[]> {
-    return this.get<SkillModel[]>(this.dataUrl);
+    return this.httpService.get<SkillModel[]>(this.dataUrl);
   }
 }

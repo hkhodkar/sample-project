@@ -1,0 +1,10 @@
+<div class="select-container">
+  <label>{{label}}:</label>
+  <select class="select" [disabled]="isDisabled" [value]="value" (change)="onSelectionChange($event)">
+    <option *ngIf="placeholder" disabled>{{ placeholder }}</option>
+    <option *ngFor="let option of options" [value]="option.id">{{ option.value }}</option>
+  </select>
+  <div *ngIf="hasError" class="error">
+    {{ errorMessage }}
+  </div>
+</div>
