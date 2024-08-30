@@ -26,8 +26,7 @@
     [max]="2000" />
   <app-input [formControl]="getFormControl('totalSalaryPM')" label="Total Salary/PM" type="number" [min]="1000"
     [max]="12000" />
-  <app-input [formControl]="getFormControl('totalSalaryPA')" label="Total Salary/PA" type="number" [min]="12000"
-    [max]="144000" />
+  <app-input [readOnly]="true" [formControl]="getFormControl('totalSalaryPA')" label="Total Salary/PA" type="number" />
   <app-skills-dropdown [selectedSItems]="skillItems" [formControl]="selectedItemsControl"></app-skills-dropdown>
 
 

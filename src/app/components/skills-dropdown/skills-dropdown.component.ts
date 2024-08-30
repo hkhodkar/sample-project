@@ -20,7 +20,7 @@ import { SkillsService } from '../../services/skills.service';
 })
 export class SkillsDropdownComponent implements OnInit, OnChanges, ControlValueAccessor {
 
-  controlContainer = inject(ControlContainer, { optional: true })
+  controlContainer = inject(ControlContainer, { optional: true });
   ngOnChanges(): void {
     if (this.selectedSItems?.length > 0) {
       const selectedId = this.selectedSItems.map(item => item.id);

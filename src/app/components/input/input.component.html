@@ -1,5 +1,6 @@
 <div class="input-container">
   <label>{{label}}:</label>
-  <input class="input" [type]="type" [formControl]="employeeFirstName" [value]="value" (change)="onInputChange($event)">
-  <div class="error" *ngIf="hasError">{{errorMessage}}</div>
+  <input [readonly]="readOnly" class="input" [type]="type" [formControl]="employeeFirstName" [value]="value"
+    (change)="onInputChange($event)">
+  <div class="error" *ngIf="hasError && !readOnly">{{errorMessage}}</div>
 </div>

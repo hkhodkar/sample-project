@@ -1,6 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, forwardRef, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, forwardRef, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ControlContainer, ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
@@ -17,7 +17,7 @@ import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Reacti
   ]
 })
 export class InputComponent implements ControlValueAccessor, OnChanges {
-
+  controlContainer = inject(ControlContainer, { optional: true });
   @Input() pattern: string | null = null;
   @Input() isRequired: boolean = true;
   @Input() minLength: number | null = null;
@@ -26,6 +26,7 @@ export class InputComponent implements ControlValueAccessor, OnChanges {
   @Input() max: number | null = null;
   @Input({ required: true }) label: string = '';
   @Input({ required: true }) type: string | number = '';
+  @Input() readOnly: boolean = false;
   employeeFirstName = new FormControl<string | null>(null);
   value: string | number | null = null;
   isDisabled = false;
@@ -74,6 +75,9 @@ export class InputComponent implements ControlValueAccessor, OnChanges {
   onInputChange(event: Event): void {
     const selectElement = event.target as HTMLInputElement;
     this.value = this.type === "number" ? +selectElement.value : selectElement.value;
+    if (+this.value >= 1000 && +this.value <= 120000) {
+      (this.controlContainer as any).form?.controls["totalSalaryPA"]?.patchValue(+this.value * 12000);
+    }
     this.onChange(this.value);
     this.onTouched();
   }
