@@ -1,6 +1,6 @@
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, forwardRef, HostListener, inject, input, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ControlContainer, ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SkillModel } from '../../models/skill.model';
 import { SkillsService } from '../../services/skills.service';
 
@@ -20,11 +20,23 @@ import { SkillsService } from '../../services/skills.service';
 })
 export class SkillsDropdownComponent implements OnInit, OnChanges, ControlValueAccessor {
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.selectedSkills.length > 0) {
-      this.selectedSkills.map(item => {
-        this.toggleSelection(item)
-      })
+  controlContainer = inject(ControlContainer, { optional: true })
+  ngOnChanges(): void {
+    if (this.selectedSItems?.length > 0) {
+      const selectedId = this.selectedSItems.map(item => item.id);
+      this.filteredItems = this.filteredItems.map(item => {
+        if (selectedId.includes(item.id)) {
+          return {
+            ...item,
+            isSelected: true
+          }
+        } else {
+          return {
+            ...item,
+            isSelected: false
+          }
+        }
+      });
     }
   }
 
@@ -45,7 +57,8 @@ export class SkillsDropdownComponent implements OnInit, OnChanges, ControlValueA
   items: SkillModel[] = [];
   filteredItems: SkillModel[] = [];
   searchControl = new FormControl('', Validators.required);
-  @Input() selectedSkills: SkillModel[] = [];
+  selectedSkills = new FormControl([], Validators.required);
+  @Input() selectedSItems: SkillModel[] = [];
   selectedItems: SkillModel[] = [];
   dropdownOpen = false;
 
@@ -74,7 +87,6 @@ export class SkillsDropdownComponent implements OnInit, OnChanges, ControlValueA
   toggleSelection(selectedItem: SkillModel) {
     const index = this.selectedItems.findIndex(item => item.id == selectedItem.id);
     if (index > -1) {
-      this.selectedItems.splice(index, 1);
       this.filteredItems = this.filteredItems.map(item => {
         if (item.id === selectedItem.id) {
           item.isSelected = false
@@ -82,16 +94,20 @@ export class SkillsDropdownComponent implements OnInit, OnChanges, ControlValueA
         return item;
       });
     } else {
-      this.selectedItems.push(selectedItem);
       this.filteredItems = this.filteredItems.map(item => {
         if (item.id === selectedItem.id) {
-          item.isSelected = true
+          return {
+            ...item,
+            isSelected: true
+          }
+        } else {
+          return item;
         }
-        return item;
       });
     }
     this.searchControl.setValue('', { emitEvent: false });
-    this.filterItems('');
+    this.selectedItems = [...this.filteredItems.filter(item => item.isSelected)];
+    (this.controlContainer as any).form.controls["selectedSkills"].value.push(selectedItem);
   }
 
   toggleDropdown() {
@@ -132,15 +148,6 @@ export class SkillsDropdownComponent implements OnInit, OnChanges, ControlValueA
       return 'This field is required';
     }
     return '';
-  }
-
-  updateSelection(filteredItems: SkillModel[], selectedItems: SkillModel[]): SkillModel[] {
-    const selectedItemIds = new Set(selectedItems.map(item => item.id));
-
-    return filteredItems.map(item => ({
-      ...item,
-      isSelected: selectedItemIds.has(item.id),
-    }));
   }
 }
 

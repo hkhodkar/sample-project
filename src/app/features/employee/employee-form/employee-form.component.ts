@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SkillsDropdownComponent } from '../../../components/skills-dropdown/skills-dropdown.component';
 import { CommonModule } from '@angular/common';
@@ -8,6 +8,8 @@ import { InputComponent } from "../../../components/input/input.component";
 import { GradeService } from '../../../services/grade.service';
 import { ReportingManagerService } from '../../../services/reporting-manager.service';
 import { EmployeesService } from '../../../services/employees.service';
+import { EmployeeModel } from '../../../models/employee.model';
+import { SkillModel } from '../../../models/skill.model';
 
 @Component({
   selector: 'app-employee-form',
@@ -23,6 +25,7 @@ export class EmployeeFormComponent implements OnChanges {
   grade: number | null = null;
   reportingManager: number | null = null;
   departmentName: number | null = null;
+  @Output() saveEmployee = new EventEmitter();
   ngOnChanges(): void {
     if (!this.employeeId) return;
     this.employeeService.findById(this.employeeId)
@@ -33,18 +36,21 @@ export class EmployeeFormComponent implements OnChanges {
           this.reportingManager = employee!.reportingManger;
           this.departmentName = employee!.department;
           this.form.patchValue({
+            id: employee!.id,
             firstName: employee!.firstName,
             middleName: employee!.middleName,
             lastName: employee!.lastName,
             houseRent: +employee!.houseRent,
             basicSalary: +employee!.basicSalary,
             otherAllowance: employee!.otherAllowance,
-            departmentName: employee!.department,
-            TotalSalaryPM: +employee!.totalSalaryPA,
-            TotalSalaryPA: +employee!.totalSalaryPM,
+            totalSalaryPM: +employee!.totalSalaryPA,
+            totalSalaryPA: +employee!.totalSalaryPM,
             grade: employee!.grade,
-            reportingManager: employee!.reportingManger,
+            reportingManger: employee!.reportingManger,
             employeeCode: employee!.employeeCode,
+            department: employee!.department,
+            selectedSkills: employee!.skills,
+            selectedTitle: employee!.skillsTitles,
           });
         }
       })
@@ -57,32 +63,34 @@ export class EmployeeFormComponent implements OnChanges {
   reportingManger$ = inject(ReportingManagerService).getReportingMangers();
 
   form = new FormGroup({
+    id: new FormControl<number | null>(null),
     firstName: new FormControl<string>(""),
     middleName: new FormControl<string>(""),
     lastName: new FormControl<string>(""),
     houseRent: new FormControl<number | null>(null),
     basicSalary: new FormControl<number | null>(null),
     otherAllowance: new FormControl<number | null>(null),
-    selectedSkills: new FormControl<number[]>([], Validators.required),
-    departmentName: new FormControl<number | null>(1),
-    TotalSalaryPM: new FormControl<number | null>(null),
-    TotalSalaryPA: new FormControl<number | null>(null),
+    totalSalaryPM: new FormControl<number | null>(null),
+    totalSalaryPA: new FormControl<number | null>(null),
     grade: new FormControl<number | null>(1),
-    reportingManager: new FormControl<number | null>(1),
-    employeeCode: new FormControl<string | number>('', Validators.compose([Validators.required, Validators.pattern('^([A-Z#]\d{3,4}[A-Z]{2})(\d{2}|\d{1})$')]))
+    reportingManger: new FormControl<number | null>(1),
+    employeeCode: new FormControl<string | number>('', Validators.compose([Validators.required, Validators.pattern('^([A-Z#]\d{3,4}[A-Z]{2})(\d{2}|\d{1})$')])),
+    department: new FormControl<number | null>(1),
+    selectedSkills: new FormControl<SkillModel[]>([]),
+    selectedTitle: new FormControl<string>(""),
   });
 
   getFormControl(name: string) {
     return this.form.get(name) as FormControl<number | string | string[]>;
   }
 
-  get departmentNameControl() {
-    return this.form.get('departmentName') as FormControl<number>;
+  get selectedItemsControl() {
+    return this.form.get('selectedSkills') as FormControl<SkillModel[]>;
   }
+
 
   onSubmit() {
-    console.log('Selected Items:', this.form.value);
+    this.saveEmployee.emit(this.form.value);
+    this.form.reset();
   }
-
-
 }

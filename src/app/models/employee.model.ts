@@ -1,7 +1,7 @@
 import { SkillModel } from "./skill.model"
 
 export interface EmployeeModel {
-  id: number,
+  id?: number,
   employeeCode: string,
   firstName: string,
   middleName: string,
@@ -10,10 +10,15 @@ export interface EmployeeModel {
   grade: number,
   reportingManger: number,
   skills: SkillModel[],
+  selectedSkills: SkillModel[],
   skillsTitles: string,
   houseRent: number,
   otherAllowance: number
   totalSalaryPM: number,
   totalSalaryPA: number,
-  basicSalary: number
+  basicSalary: number,
+  gradeTitle: string,
+  departmentTitle: string,
+  reportingMangerName: string,
+  selectedTitle: string,
 }
