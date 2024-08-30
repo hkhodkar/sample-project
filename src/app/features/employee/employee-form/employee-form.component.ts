@@ -26,6 +26,7 @@ export class EmployeeFormComponent implements OnChanges {
   reportingManager: number | null = null;
   departmentName: number | null = null;
   @Input() showForm: boolean = false;
+  showEmployeeCodeError: boolean = false;
   @Output() saveEmployee = new EventEmitter();
   @Output() hideForm = new EventEmitter();
   ngOnChanges(): void {
@@ -73,13 +74,13 @@ export class EmployeeFormComponent implements OnChanges {
     basicSalary: new FormControl<number | null>(null, Validators.required),
     otherAllowance: new FormControl<number | null>(null, Validators.required),
     totalSalaryPM: new FormControl<number | null>(null, Validators.required),
-    totalSalaryPA: new FormControl<string | null>(null, Validators.required),
+    totalSalaryPA: new FormControl<string | null>(null),
     grade: new FormControl<number | null>(1),
     reportingManger: new FormControl<number | null>(1),
-    employeeCode: new FormControl<string | number>('', Validators.compose([Validators.required, Validators.pattern('^([A-Z#]\d{3,4}[A-Z]{2})(\d{2}|\d{1})$')])),
-    department: new FormControl<number | null>(1, Validators.required),
-    selectedSkills: new FormControl<SkillModel[]>([], Validators.required),
-    selectedTitle: new FormControl<string>("", Validators.required),
+    employeeCode: new FormControl<string | number>('', Validators.required),
+    department: new FormControl<number | null>(1),
+    selectedSkills: new FormControl<SkillModel[]>([]),
+    selectedTitle: new FormControl<string>(""),
   });
 
   getFormControl(name: string) {
@@ -103,5 +104,6 @@ export class EmployeeFormComponent implements OnChanges {
     }
     this.saveEmployee.emit(this.form.value);
     this.form.reset();
+    this.showForm = false;
   }
 }

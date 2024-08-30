@@ -147,15 +147,5 @@ export class SkillsDropdownComponent implements OnInit, OnChanges, ControlValueA
     return this.selectedItems.includes(item)
   }
 
-  get hasError(): boolean {
-    return this.searchControl ? this.selectedItems.length === 0 && (this.searchControl.dirty || this.searchControl.touched) : false;
-  }
-
-  get errorMessage(): string {
-    if (this.searchControl?.errors?.['required']) {
-      return 'This field is required';
-    }
-    return '';
-  }
 }
 

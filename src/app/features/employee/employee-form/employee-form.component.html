@@ -1,4 +1,4 @@
-<div class="accordion" *ngIf="showForm">
+<div class="accordion" [hidden]="showForm">
 
   <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
     <input type="hidden" formControlName="id">

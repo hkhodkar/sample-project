@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, inject, Input, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./layout/header/header.component";
 import { CardComponent } from './components/card/card.component';
@@ -32,6 +32,7 @@ import { SkillsService } from './services/skills.service';
 })
 export class AppComponent implements OnInit {
 
+  cdr = inject(ChangeDetectorRef);
   employeeService = inject(EmployeesService);
   gradeService = inject(GradeService);
   departmentService = inject(DepartmentsService);
@@ -77,11 +78,20 @@ export class AppComponent implements OnInit {
 
   title = 'sample-project';
 
-  employeeId: number | null = null;
+  @Input()
+  private _employeeId: number | null = null;
+  get employeeId(): number {
+    return this._employeeId as number;
+  }
+  set employeeId(v: number) {
+    if (!v) return;
+    this._employeeId = v;
+  };
 
   onEditRow(id: number) {
-    this.showForm = true;
+    this.showForm = false;
     this.employeeId = id;
+    this.cdr.detectChanges();
   }
 
   onChangeShowForm() {
@@ -96,10 +106,10 @@ export class AppComponent implements OnInit {
     let selectedSkills = employee?.selectedSkills?.map(item => item.id);
     employee.skillsTitles = this.skills.filter(skill => selectedSkills?.includes(skill.id)).map(item => item?.value).join(", ");
     if (index === -1) {
-
       this.data = [{ ...employee }, ...this.data]
     } else {
       this.data.splice(index, 1, employee)
     }
+    this.onChangeShowForm();
   }
 }
