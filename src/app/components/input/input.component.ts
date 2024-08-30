@@ -25,7 +25,7 @@ export class InputComponent implements ControlValueAccessor, OnChanges {
   @Input() min: number | null = null;
   @Input() max: number | null = null;
   @Input({ required: true }) label: string = '';
-  @Input({ required: true }) type: string | number = '';
+  @Input({ required: true }) type: string | number | "alphabetic" = '';
   @Input() readOnly: boolean = false;
   formControlName = new FormControl<string | null>(null);
   value: string | number | null = null;
@@ -35,6 +35,11 @@ export class InputComponent implements ControlValueAccessor, OnChanges {
     if (this.isRequired) {
       this.formControlName.addValidators(Validators.required)
     }
+
+    if (this.type === "alphabetic") {
+      this.formControlName.addValidators(Validators.pattern("^[a-zA-Z]+$"))
+    }
+
     if (this.pattern && this.pattern?.length > 0) {
       this.formControlName.addValidators(Validators.pattern(this.pattern))
     }
@@ -91,7 +96,7 @@ export class InputComponent implements ControlValueAccessor, OnChanges {
       return 'This field is required';
     }
 
-    if (this.formControlName.errors?.['pattern']) {
+    if (this.type === "text" && this.formControlName.errors?.['pattern']) {
       return `
       First letter from left to right must be upper case alphabet from A to Z or “#” only.
       Next 3 or 4 characters must be numbers, after that following 2 characters is upper case
@@ -101,16 +106,20 @@ export class InputComponent implements ControlValueAccessor, OnChanges {
       The correct example: A123AB1 or #1234CD12`;
     }
 
+    if (this.type === "alphabetic" && this.formControlName.errors?.['pattern']) {
+      return `Please enter just english alphabetic character`;
+    }
+
     if (this.type === "number" && this.formControlName.errors?.['min'])
       return `the value must be greater than ${this.min}`;
 
     if (this.type === "number" && this.formControlName.errors?.['max'])
       return `the value must be less than ${this.max}`;
 
-    if (this.type === "text" && this.formControlName.errors?.['minlength'])
+    if ((this.type === "text" || this.type === "alphabetic") && this.formControlName.errors?.['minlength'])
       return `the value length must be greater than ${this.minLength}`;
 
-    if (this.type === "text" && this.formControlName.errors?.['maxlength'])
+    if ((this.type === "text" || this.type === "alphabetic") && this.formControlName.errors?.['maxlength'])
       return `the value length must be less than ${this.maxLength}`;
 
     return "";

@@ -2,11 +2,11 @@
 
   <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
     <input type="hidden" formControlName="id">
-    <app-input [formControl]="getFormControl('firstName')" label="First Name" type="text" [minLength]="3"
+    <app-input [formControl]="getFormControl('firstName')" label="First Name" type="alphabetic" [minLength]="3"
       [maxLength]="30" />
-    <app-input [isRequired]="false" [formControl]="getFormControl('middleName')" label="Middle Name" type="text"
+    <app-input type="alphabetic" [isRequired]="false" [formControl]="getFormControl('middleName')" label="Middle Name"
       [minLength]="3" [maxLength]="30" />
-    <app-input [formControl]="getFormControl('lastName')" label="Last Name" type="text" [minLength]="3"
+    <app-input type="alphabetic" [formControl]="getFormControl('lastName')" label="Last Name" [minLength]="3"
       [maxLength]="30" />
     <app-select-box-input label="Department Name" [value]="departmentName" [options]="(departments$! | async)"
       placeholder="Department Name" [formControl]="getFormControl('department')">
