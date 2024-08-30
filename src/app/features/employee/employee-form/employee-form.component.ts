@@ -25,7 +25,9 @@ export class EmployeeFormComponent implements OnChanges {
   grade: number | null = null;
   reportingManager: number | null = null;
   departmentName: number | null = null;
+  @Input() showForm: boolean = false;
   @Output() saveEmployee = new EventEmitter();
+  @Output() hideForm = new EventEmitter();
   ngOnChanges(): void {
     if (!this.employeeId) return;
     this.employeeService.findById(this.employeeId)
@@ -88,12 +90,18 @@ export class EmployeeFormComponent implements OnChanges {
     return this.form.get('selectedSkills') as FormControl<SkillModel[]>;
   }
 
+  onCancel() {
+    this.skillItems = null;
+    this.form.reset();
+    this.hideForm.emit();
+  }
+
 
   onSubmit() {
-    this.saveEmployee.emit(this.form.value);
     if (this.form.invalid) {
       return;
     }
+    this.saveEmployee.emit(this.form.value);
     this.form.reset();
   }
 }

@@ -1,7 +1,9 @@
 <app-header />
 <section class="container">
   <app-card>
-    <app-employee-form (saveEmployee)="onSaveEmployee($event)" [employeeId]="employeeId" />
+    <button type="button" (click)="onChangeShowForm()">Add Employee</button>
+    <app-employee-form (hideForm)="onChangeShowForm()" [showForm]="showForm" (saveEmployee)=" onSaveEmployee($event)"
+      [employeeId]="employeeId" />
     <app-employee-table [data]="data" [columns]="columns" (editRow)="onEditRow($event)" />
   </app-card>
 </section>

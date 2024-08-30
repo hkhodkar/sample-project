@@ -58,7 +58,15 @@ export class SkillsDropdownComponent implements OnInit, OnChanges, ControlValueA
   filteredItems: SkillModel[] = [];
   searchControl = new FormControl('', Validators.required);
   selectedSkills = new FormControl([], Validators.required);
-  @Input() selectedSItems: SkillModel[] = [];
+  private _selectedSItems: SkillModel[] = [];
+  @Input()
+  get selectedSItems(): SkillModel[] {
+    return this._selectedSItems;
+  };
+  set selectedSItems(value: SkillModel[]) {
+    if (!value) return;
+    this._selectedSItems = [...value]
+  }
   selectedItems: SkillModel[] = [];
   dropdownOpen = false;
 

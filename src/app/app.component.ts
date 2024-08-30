@@ -37,12 +37,12 @@ export class AppComponent implements OnInit {
   departmentService = inject(DepartmentsService);
   reportingManagerService = inject(ReportingManagerService);
   skillService = inject(SkillsService);
-
   data: any = [];
   grades: DropDownDataModel[] = [];
   departments: DropDownDataModel[] = [];
   reportingManagers: DropDownDataModel[] = [];
   skills: DropDownDataModel[] = [];
+  showForm: boolean = false;
   columns = [
     { key: "Employee Code", value: "employeeCode" },
     { key: "First Name", value: "firstName" },
@@ -80,7 +80,12 @@ export class AppComponent implements OnInit {
   employeeId: number | null = null;
 
   onEditRow(id: number) {
+    this.showForm = true;
     this.employeeId = id;
+  }
+
+  onChangeShowForm() {
+    this.showForm = !this.showForm;
   }
 
   onSaveEmployee(employee: EmployeeModel): void {

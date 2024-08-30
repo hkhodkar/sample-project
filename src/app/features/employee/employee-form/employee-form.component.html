@@ -1,33 +1,39 @@
-<h4>Add Employee</h4>
-<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <input type="hidden" formControlName="id">
-  <app-input [formControl]="getFormControl('firstName')" label="First Name" type="text" [minLength]="3"
-    [maxLength]="30" />
-  <app-input [isRequired]="false" [formControl]="getFormControl('middleName')" label="Middle Name" type="text"
-    [minLength]="3" [maxLength]="30" />
-  <app-input [formControl]="getFormControl('lastName')" label="Last Name" type="text" [minLength]="3"
-    [maxLength]="30" />
-  <app-select-box-input label="Department Name" [value]="departmentName" [options]="(departments$! | async)"
-    placeholder="Department Name" [formControl]="getFormControl('department')">
-  </app-select-box-input>
-  <app-select-box-input [formControl]="getFormControl('grade')" label="Grade" [value]="grade"
-    [options]="(grade$! | async)" placeholder="Grade" [formControl]="getFormControl('grade')">
-  </app-select-box-input>
-  <app-select-box-input [formControl]="getFormControl('reportingManger')" label="Reporting Manger"
-    [options]="(reportingManger$! | async)" placeholder="Reporting Manger" [value]="reportingManager"
-    [formControl]="getFormControl('reportingManger')">
-  </app-select-box-input>
-  <app-input [formControl]="getFormControl('basicSalary')" label="Basic Salary" type="number" [min]="100"
-    [max]="5000" />
-  <app-input [formControl]="getFormControl('houseRent')" label="House Rent" type="number" [min]="100" [max]="3000" />
-  <app-input [formControl]="getFormControl('otherAllowance')" label="Other Allowance" type="number" [min]="100"
-    [max]="2000" />
-  <app-input [formControl]="getFormControl('totalSalaryPM')" label="Total Salary/PM" type="number" [min]="1000"
-    [max]="12000" />
-  <app-input [readOnly]="true" [formControl]="getFormControl('totalSalaryPA')" label="Total Salary/PA" type="number" />
-  <app-skills-dropdown [selectedSItems]="skillItems" [formControl]="selectedItemsControl"></app-skills-dropdown>
-  <app-input [formControl]="getFormControl('employeeCode')" label="Employee Code" type="text"
-    pattern="^([A-Z#]\d{3,4}[A-Z]{2})(\d{2}|\d{1})$" />
-</form>
-<button [ngClass]="this.form.invalid ? 'button-disabled': ''" [disabled]="this.form.invalid" (click)="onSubmit()"
-  type="submit">Save</button>
+<div class="accordion" *ngIf="showForm">
+
+  <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <input type="hidden" formControlName="id">
+    <app-input [formControl]="getFormControl('firstName')" label="First Name" type="text" [minLength]="3"
+      [maxLength]="30" />
+    <app-input [isRequired]="false" [formControl]="getFormControl('middleName')" label="Middle Name" type="text"
+      [minLength]="3" [maxLength]="30" />
+    <app-input [formControl]="getFormControl('lastName')" label="Last Name" type="text" [minLength]="3"
+      [maxLength]="30" />
+    <app-select-box-input label="Department Name" [value]="departmentName" [options]="(departments$! | async)"
+      placeholder="Department Name" [formControl]="getFormControl('department')">
+    </app-select-box-input>
+    <app-select-box-input [formControl]="getFormControl('grade')" label="Grade" [value]="grade"
+      [options]="(grade$! | async)" placeholder="Grade" [formControl]="getFormControl('grade')">
+    </app-select-box-input>
+    <app-select-box-input [formControl]="getFormControl('reportingManger')" label="Reporting Manger"
+      [options]="(reportingManger$! | async)" placeholder="Reporting Manger" [value]="reportingManager"
+      [formControl]="getFormControl('reportingManger')">
+    </app-select-box-input>
+    <app-input [formControl]="getFormControl('basicSalary')" label="Basic Salary" type="number" [min]="100"
+      [max]="5000" />
+    <app-input [formControl]="getFormControl('houseRent')" label="House Rent" type="number" [min]="100" [max]="3000" />
+    <app-input [formControl]="getFormControl('otherAllowance')" label="Other Allowance" type="number" [min]="100"
+      [max]="2000" />
+    <app-input [formControl]="getFormControl('totalSalaryPM')" label="Total Salary/PM" type="number" [min]="1000"
+      [max]="12000" />
+    <app-input [readOnly]="true" [formControl]="getFormControl('totalSalaryPA')" label="Total Salary/PA"
+      type="number" />
+    <app-skills-dropdown [selectedSItems]="skillItems" [formControl]="selectedItemsControl"></app-skills-dropdown>
+    <app-input [formControl]="getFormControl('employeeCode')" label="Employee Code" type="text"
+      pattern="^([A-Z#]\d{3,4}[A-Z]{2})(\d{2}|\d{1})$" />
+  </form>
+  <div class="form-actions">
+    <button [ngClass]="this.form.invalid ? 'button-disabled': ''" [disabled]="this.form.invalid" (click)="onSubmit()"
+      type="submit">Save</button>
+    <button class="button-secondary" (click)="onCancel()" type="submit">Cancel</button>
+  </div>
+</div>

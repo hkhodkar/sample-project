@@ -2,4 +2,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+
+  &-actions {
+    display: flex;
+    gap: 1rem;
+  }
+}
+
+.button-secondary {
+  background-color: var(--color-secondary);
 }
