@@ -88,9 +88,8 @@ export class AppComponent implements OnInit {
     employee.reportingMangerName = this.reportingManagers.find(item => item.id == employee.reportingManger)?.value;
     employee.gradeTitle = this.grades.find(item => item.id == employee.grade)?.value;
     employee.departmentTitle = this.departments.find(item => item.id == employee.department)?.value;
-    debugger;
-    let selectedSkills = employee.selectedSkills.map(item => item.id);
-    employee.skillsTitles = this.skills.filter(skill => selectedSkills.includes(skill.id)).map(item => item.value).join(", ");
+    let selectedSkills = employee?.selectedSkills?.map(item => item.id);
+    employee.skillsTitles = this.skills.filter(skill => selectedSkills?.includes(skill.id)).map(item => item?.value).join(", ");
     if (index === -1) {
 
       this.data = [{ ...employee }, ...this.data]

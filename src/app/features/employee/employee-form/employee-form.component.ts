@@ -64,20 +64,20 @@ export class EmployeeFormComponent implements OnChanges {
 
   form = new FormGroup({
     id: new FormControl<number | null>(null),
-    firstName: new FormControl<string>(""),
+    firstName: new FormControl<string>("", Validators.required),
     middleName: new FormControl<string>(""),
-    lastName: new FormControl<string>(""),
-    houseRent: new FormControl<number | null>(null),
-    basicSalary: new FormControl<number | null>(null),
-    otherAllowance: new FormControl<number | null>(null),
-    totalSalaryPM: new FormControl<number | null>(null),
-    totalSalaryPA: new FormControl<string | null>(null),
+    lastName: new FormControl<string>("", Validators.required),
+    houseRent: new FormControl<number | null>(null, Validators.required),
+    basicSalary: new FormControl<number | null>(null, Validators.required),
+    otherAllowance: new FormControl<number | null>(null, Validators.required),
+    totalSalaryPM: new FormControl<number | null>(null, Validators.required),
+    totalSalaryPA: new FormControl<string | null>(null, Validators.required),
     grade: new FormControl<number | null>(1),
     reportingManger: new FormControl<number | null>(1),
     employeeCode: new FormControl<string | number>('', Validators.compose([Validators.required, Validators.pattern('^([A-Z#]\d{3,4}[A-Z]{2})(\d{2}|\d{1})$')])),
-    department: new FormControl<number | null>(1),
-    selectedSkills: new FormControl<SkillModel[]>([]),
-    selectedTitle: new FormControl<string>(""),
+    department: new FormControl<number | null>(1, Validators.required),
+    selectedSkills: new FormControl<SkillModel[]>([], Validators.required),
+    selectedTitle: new FormControl<string>("", Validators.required),
   });
 
   getFormControl(name: string) {
@@ -91,6 +91,9 @@ export class EmployeeFormComponent implements OnChanges {
 
   onSubmit() {
     this.saveEmployee.emit(this.form.value);
+    if (this.form.invalid) {
+      return;
+    }
     this.form.reset();
   }
 }

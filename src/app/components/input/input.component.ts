@@ -27,30 +27,30 @@ export class InputComponent implements ControlValueAccessor, OnChanges {
   @Input({ required: true }) label: string = '';
   @Input({ required: true }) type: string | number = '';
   @Input() readOnly: boolean = false;
-  employeeFirstName = new FormControl<string | null>(null);
+  formControlName = new FormControl<string | null>(null);
   value: string | number | null = null;
   isDisabled = false;
 
   ngOnChanges(): void {
     if (this.isRequired) {
-      this.employeeFirstName.addValidators(Validators.required)
+      this.formControlName.addValidators(Validators.required)
     }
     if (this.pattern && this.pattern?.length > 0) {
-      this.employeeFirstName.addValidators(Validators.pattern(this.pattern))
+      this.formControlName.addValidators(Validators.pattern(this.pattern))
     }
     if (this.min) {
-      this.employeeFirstName.addValidators(Validators.min(this.min))
+      this.formControlName.addValidators(Validators.min(this.min))
     }
     if (this.max) {
-      this.employeeFirstName.addValidators(Validators.max(this.max))
+      this.formControlName.addValidators(Validators.max(this.max))
     }
     if (this.minLength) {
-      this.employeeFirstName.addValidators(Validators.minLength(this.minLength))
+      this.formControlName.addValidators(Validators.minLength(this.minLength))
     }
     if (this.maxLength) {
-      this.employeeFirstName.addValidators(Validators.maxLength(this.maxLength))
+      this.formControlName.addValidators(Validators.maxLength(this.maxLength))
     }
-    this.employeeFirstName.updateValueAndValidity();
+    this.formControlName.updateValueAndValidity();
   }
 
   onChange: (value: string | number | null) => void = () => { };
@@ -75,7 +75,7 @@ export class InputComponent implements ControlValueAccessor, OnChanges {
   onInputChange(event: Event): void {
     const selectElement = event.target as HTMLInputElement;
     this.value = this.type === "number" ? +selectElement.value : selectElement.value;
-    if (+this.value >= 1000 && +this.value <= 120000) {
+    if ((event?.target as any)?.id === "Total Salary/PM" && +this.value >= 1000 && +this.value <= 120000) {
       (this.controlContainer as any).form?.controls["totalSalaryPA"]?.patchValue(+this.value * 12000);
     }
     this.onChange(this.value);
@@ -83,35 +83,41 @@ export class InputComponent implements ControlValueAccessor, OnChanges {
   }
 
   get hasError(): boolean {
-    return this.employeeFirstName ? this.employeeFirstName.invalid && (this.employeeFirstName.dirty || this.employeeFirstName.touched) : false;
+    return this.formControlName ? this.formControlName.invalid && (this.formControlName.dirty || this.formControlName.touched) : false;
   }
 
   get errorMessage(): string {
-    if (this.employeeFirstName?.errors?.['required']) {
+    if (this.formControlName?.errors?.['required']) {
       return 'This field is required';
     }
 
-    if (this.employeeFirstName.errors?.['pattern']) {
-      return 'code is invalid the correct example: A123AB1 or #1234CD12';
+    if (this.formControlName.errors?.['pattern']) {
+      return `
+      First letter from left to right must be upper case alphabet from A to Z or “#” only.
+      Next 3 or 4 characters must be numbers, after that following 2 characters is upper case
+      alphabets
+      Total length must be 8 or 10 characters only. In case of 10 characters, last 2 are digits
+      and in case of 8 characters, last 1 character only is digit
+      The correct example: A123AB1 or #1234CD12`;
     }
 
-    if (this.type === "number" && this.employeeFirstName.errors?.['min'])
+    if (this.type === "number" && this.formControlName.errors?.['min'])
       return `the value must be greater than ${this.min}`;
 
-    if (this.type === "number" && this.employeeFirstName.errors?.['max'])
+    if (this.type === "number" && this.formControlName.errors?.['max'])
       return `the value must be less than ${this.max}`;
 
-    if (this.type === "text" && this.employeeFirstName.errors?.['minlength'])
+    if (this.type === "text" && this.formControlName.errors?.['minlength'])
       return `the value length must be greater than ${this.minLength}`;
 
-    if (this.type === "text" && this.employeeFirstName.errors?.['maxlength'])
+    if (this.type === "text" && this.formControlName.errors?.['maxlength'])
       return `the value length must be less than ${this.maxLength}`;
 
     return "";
   }
 
   get patternError(): string[] {
-    if (this.employeeFirstName.errors?.['pattern']) {
+    if (this.formControlName.errors?.['pattern']) {
       return ['First letter from left to right must be upper case alphabet from A to Z or “#” /br']
     }
     return [""]
